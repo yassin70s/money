@@ -1,0 +1,226 @@
+<html>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <head>
+    
+    <title>{{title}}</title>
+    <style type="text/css">
+        @page {
+            
+            margin: 0mm 0mm 0mm 0mm;
+            width: {{size.width}};
+            height: {{size.height}};
+            
+            margin-top: {{margin.top}};
+            margin-bottom: {{margin.bottom}};
+            margin-left: {{margin.left}};
+            margin-right: {{margin.right}};
+            
+        }
+        @font-face{
+            font-family: "Bader";
+            src: url({{font_Bader}});
+
+        }
+
+        td {
+            border: 1px solid black;
+            font-size: 13px;
+        
+        }
+        table {
+            border:2px solid black;
+        }
+        th {
+            border: 1px solid black;
+            font-size: 12px;
+        }
+        body {
+            font-size: small;
+            
+        }
+        .field-_medicine_id{
+            width: 1%;
+            
+        }
+        
+    </style>
+    
+    {% block style %}
+
+    
+    
+    {% endblock %}
+    
+</head>
+
+<body>
+    
+<div class="p-4" dir="rtl" style="width: {{size.width}};padding: 4mm;" class="text-sm">
+    
+    {% block header_page %}
+    <div class="row" style="border: 2px solid black ;border-radius: 15px;" >
+        <div class="col-4">
+          <address>
+            <center>
+                {% for address in address_list %}
+                    {{address}}<br>
+                {% endfor %}
+            </center>
+        </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+            <center>
+                        بسم الله الرحمن الرحيم
+                    <address>
+                      
+                        <img src="{{logo}}" class="p-0" style="width: 150px; hight: 150px;" alt="">
+                        
+                      </address>
+                      <span class="p-0" style="padding: 0;font-size: small"> {{title_report}}</span>
+
+                     
+                      
+                      
+                      
+            </center>
+        </div>
+        <!-- /.col -->
+        <div class="col-4" style="text-align: center;">
+            {% if logo_2 %}
+                <img src="{{logo_2}}" class="p-0" style="width: 150px; hight: 150px;" alt="">
+            {% endif %}
+                    
+        </div>
+        <!-- /.col -->
+        
+        
+        
+    
+    
+    </div>
+   
+    
+    {% endblock %}
+    
+    
+
+    
+    {% block header_report %}
+        
+    
+    <div class="row" style="border: 2px solid black;margin-top: 5px;border-bottom: 0;border-radius: 10px 10px 0 0;" >
+        
+        {% for fieldset in result_fieldsets_list %}
+        <div class="col">
+            {% if fieldset.name %}
+            <div class="col-12" style="text-align: center;">
+                {{fieldset.name}}
+            </div>
+            {% endif %}
+            <div class="row">
+                {% for field in fieldset.fields %}
+                    <div class="col-12" >
+                        <b>
+                            {{field.name}}: 
+                        </b>
+                        {{field.value}}
+                                
+                    </div> 
+
+                {% endfor %}
+            </div>
+        </div> 
+            
+        {% endfor %}
+            
+        
+        
+        
+
+    </div>
+   
+
+    {% endblock %}
+        
+
+
+    {% block content %}
+     
+            
+    {% if result_list.results %}
+        <div class="row">
+            <table style="width: 100%;" >
+                <thead>
+                    <tr>
+                    
+                        
+                        {% for header in result_list.result_headers %}
+                            <th rowspan="2" style="background-color: aqua;">
+                            
+                                {{header.text}}
+                           
+                            </th>
+                        {% endfor %}
+                    
+                    
+                    </tr>
+                    
+                </thead>  
+                    
+                <tbody>
+                    {% for result in result_list.results %}
+                    
+                    <tr>
+                        {% for item in result %}
+                            {{ item }}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                                    
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            {% block report_footer %}
+            {% for footer in footer_list %}
+            <div class="col">
+                {{footer}}
+            </div>
+            {% endfor %}
+                    
+    
+            {% endblock %}
+        </div>
+
+
+        {% else %}
+            <div class="col-12">
+                <br><br><br><br><br><br>
+                <center>
+                    <h3>لا يوجد بيانات ...</h3>
+                </center>
+                
+            </div>
+        {% endif %}
+
+
+    {% endblock %}
+
+
+
+
+    
+
+
+
+
+
+</div>
+
+</body>
+
+</html>

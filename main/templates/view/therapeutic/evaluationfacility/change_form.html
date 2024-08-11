@@ -1,0 +1,60 @@
+{% extends 'view/change_form.html' %}
+
+
+{% block content %}
+{{block.super}}
+
+<script>
+    var form = document.getElementById("evaluationfacility_form")
+   
+    
+   
+    async function chak_form() {
+        
+        
+        var data = {}
+        console.log(5544,form.elements)
+        for (let index = 0; index < form.elements.length; index++) {
+            const element = form.elements[index];
+            data[element.name] = {value:element.value}
+        }
+        
+        
+                        
+        await fetch("{{change_form_chek_api_url}}",{
+                method: 'post',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    "Content-Type":"application/json",
+                    //"X-Requested-With":"XMLHttpRequest",
+                    "Accept":"application/json",
+                },     
+                body:JSON.stringify({fields:data}),
+                }
+            )
+            .then(reaponse => reaponse.json()).then(data =>{
+                    console.log(data);
+                    
+                    for (let i = 0; i < data.fieldsets.length; i++) {
+                        
+                        const fieldset = data.fieldsets[i]
+                        document.getElementsByName(`evaluationfacilitystandardelement_set-${i}-degree`)[0].value = fieldset.degree.value
+                        //document.getElementsByClassName("field-stock")[i].getElementsByTagName("p")[0].innerText = data.fields[i].value
+                        
+                        
+                    }
+                    
+            })
+                    
+            
+    };
+    
+    
+    form.addEventListener("input",chak_form);
+    form.addEventListener("load",chak_form());
+
+
+</script>
+
+{% endblock %}
+

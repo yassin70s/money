@@ -1,0 +1,55 @@
+{% extends "admin/change_form.html" %}
+
+{% block content %}
+{{block.super}}
+
+
+<script>
+    var entry_type = document.getElementsByName("recordentry-0-entry_type")[0]
+    var EntryOperaField = document.getElementsByClassName("field-EntryOpera")[0]
+    var EntryBackField = document.getElementsByClassName("field-EntryBack")[0]
+    var EntryTurnField = document.getElementsByClassName("field-EntryTurn")[0]
+
+
+    function entryType() {
+        EntryOperaField.hidden = true
+        EntryBackField.hidden = true
+        EntryTurnField.hidden = true
+        if (entry_type.value == "EntryOpera") {
+            EntryOperaField.hidden = false
+        }else if (entry_type.value == "EntryBack") {
+            EntryBackField.hidden = false
+        }else if (entry_type.value == "EntryTurn") {
+            EntryTurnField.hidden = false
+        }
+    }
+    entryType()
+    entry_type.addEventListener("change",entryType)
+
+
+    var result_type = document.getElementsByName("recordresult-0-result_type")[0]
+    //var ResultTeratmentField = document.getElementsByClassName("field-ResultTeratment")[0]
+    var ResultDiggField = document.getElementsByClassName("field-ResultDigg")[0]
+    var ResultBackField = document.getElementsByClassName("field-ResultBack")[0]
+    var ResultTurnField = document.getElementsByClassName("field-ResultTurn")[0]
+    var ResultDeathField = document.getElementsByClassName("field-ResultDeath")[0]
+    function resultType() {
+        //ResultTeratmentField.hidden = true
+        ResultDiggField.hidden = true
+        ResultBackField.hidden = true
+        ResultTurnField.hidden = true
+        ResultDeathField.hidden = true
+        if (result_type.value == "ResultDigg") {
+            ResultDiggField.hidden = false
+        }else if (result_type.value == "ResultBack") {
+            ResultBackField.hidden = false
+        }else if (result_type.value == "ResultTurn") {
+            ResultTurnField.hidden = false
+        }else if (result_type.value == "ResultDeath") {
+            ResultDeathField.hidden = false
+        }
+    }
+    resultType()
+    result_type.addEventListener("change",resultType)
+</script>
+{% endblock %}

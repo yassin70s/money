@@ -1,0 +1,9 @@
+{% extends 'layouts/default.html' %}
+
+
+
+{% block content %}
+
+<iframe src="{% url 'report:app_list' app_label=cl.opts.app_label %}" width="100%" height="650" frameborder="0"></iframe>
+
+{% endblock %}

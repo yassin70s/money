@@ -1,0 +1,111 @@
+{% extends "report/change_list.html" %}
+
+
+
+
+{% block content %}
+     
+            
+    {% if profilemedicals %}
+        <div class="row">
+            <table class="text-sm table-sm" style="width: 100%;font-family: Bade;" >
+                <thead>
+                    <tr style="background-color: aqua;">
+                        <th rowspan="3">الأسم</th>
+                        <th rowspan="3">الكنية</th>
+                        <th rowspan="3">المشرف المباشر</th>
+                        <th rowspan="3">الحالة</th>
+                        <th rowspan="3">عدد الإصابات</th>
+                        <th rowspan="3">الزيارات قبل الفترة</th>
+                        <th rowspan="3">الزيارات خلال الفترة</th>
+                        <th style="width: 70%;" colspan="7">الإجراءات الطبية</th>
+                       
+
+                    
+                    
+                    </tr>
+                    <tr style="background-color: aqua;">
+                        <th colspan="3">الزيارة</th>
+                        <th colspan="3">الإجراءات</th>
+                        <th rowspan="2">النتيجة</th>
+                    </tr>
+                    <tr style="background-color: aqua;">
+                        <th>التاريخ</th>
+                        <th>المستشفى</th>
+                        <th>الإصابة</th>
+                        <th>الإجراء</th>
+                        <th>الحالة</th>
+                        <td>الجهة</td>
+
+                    </tr>
+                    
+                </thead>  
+                    
+                <tbody>
+                    {% for profilemedical in profilemedicals %}
+                        {% for entry in profilemedical.entrys %}
+                            {% for procedure in entry.procedures %}
+
+                                <tr>
+                                    {% if procedure.index == 1 %}
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.name}}{{procedure.index}}</td>
+                                        
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.name_2}}</td>
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.supervisordirect}}</td>
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.statu}}</td>
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.diagnosi_count}}</td>
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.entrys_last_count}}</td>
+                                        <td rowspan="{{profilemedical.rowspan}}">{{profilemedical.entrys_count}}</td>
+                                    {% endif %}
+                                    {% if entry.entry_index == procedure.entry_index and procedure.entry_procedure_index == 1 %}
+                                        <td rowspan="{{entry.rowspan}}">{{entry.obj.date}}</td>
+                                        <td rowspan="{{entry.rowspan}}">{{entry.obj.facility}}</td>
+                                        <td rowspan="{{entry.rowspan}}">
+                                            {% for diagnosi in entry.obj.entry_diagnosis %}
+                                                {{diagnosi.diagnosi.name}}
+                                            {% endfor %}
+                                        </td>
+                                    {% endif %}
+                                    <td>{{procedure.obj.procedure.name}}</td>
+                                    <td>{{procedure.statu}}</td>
+                                    <td>{{procedure.obj.facility}}</td>
+                                    {% if entry.entry_index == procedure.entry_index and procedure.entry_procedure_index == 1 %}
+                                        <td rowspan="{{entry.rowspan}}">{{entry.obj.entry_result_verbose_name}}</td>
+                                    {% endif %}
+
+
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                                    
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            {% block report_footer %}
+            {% for footer in footer_list %}
+            <div class="col">
+                {{footer}}
+            </div>
+            {% endfor %}
+                    
+    
+            {% endblock %}
+        </div>
+
+
+        {% else %}
+            <div class="col-12">
+                <br><br><br><br><br><br>
+                <center>
+                    <h3>لا يوجد بيانات ...</h3>
+                </center>
+                
+            </div>
+        {% endif %}
+
+
+{% endblock %}

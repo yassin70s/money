@@ -1,0 +1,133 @@
+{% extends "admin/change_form.html" %}
+
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+
+{{block.super}}
+
+<script>
+    var form = document.getElementById("{{opts.model_name}}_form")
+   
+    
+    document.getElementsByTagName("select")[0].selectedIndex
+    async function change_form() {
+        
+        
+        var elements = []
+        for (let index = 0; index < form.elements.length; index++) {
+            const element = form.elements[index];
+            
+            if (element.name) {
+                
+                var elementDict = {
+                    "type":element.type,
+                    "name":element.name,
+                    "value":element.value,
+                    "disabled":element.disabled,
+                    
+                }
+                var elementField = form.getElementsByClassName(`field-${element.name}`)
+                if (elementField.length) {
+                    var elementLabel = elementField[0].getElementsByTagName("label")
+                    if (elementLabel.length) {
+                        elementDict["label"] = elementLabel[0].innerText
+                    }
+
+                    elementDict["hidden"] = elementField[0].hidden
+
+                }
+                
+
+                if (element.options) {
+                    var options = []
+                    elementDict["selectedIndex"] = element.selectedIndex
+                    for (let ii = 0; ii < element.options.length; ii++) {
+                        const option = element.options[ii];
+                        var optionDict = {
+                            "index":option.index,
+                            "value":option.value,
+                            "text":option.text,
+                            "hidden":option.hidden,
+                            //"selected":option.selected,
+                        }
+                        options.push(optionDict)
+                    }
+                    elementDict["options"] = options
+                    //console.log(element.options[0].value)
+                }
+                elements.push(elementDict)
+            }
+        }
+        console.log(elements)      
+        await fetch("{{change_form_api_url}}",{
+                method: 'post',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    "Content-Type":"application/json",
+                    "Accept":"application/json",
+                },     
+                body:JSON.stringify({elements:elements}),
+                }
+            )
+            .then(reaponse => reaponse.json()).then(data =>{
+                for (let index = 0; index < data.elements.length; index++) {
+                    const element = data.elements[index];
+                    var fieldClass = null
+                    if (form.getElementsByClassName(`field-${element.name}`).length) {
+                        fieldClass = form.getElementsByClassName(`field-${element.name}`)[0]
+                    }else if(element.name && document.getElementsByName(element.name).length) {
+                        fieldClass = document.getElementsByName(element.name)[0]
+                    }
+
+                    if (fieldClass){
+                        fieldClass.hidden = element.hidden
+                    }
+                    
+
+                    if (element.label) {
+                        form.getElementsByClassName(`field-${element.name}`)[0].getElementsByTagName("label")[0].innerText = element.label
+                    }
+
+                    var formElement = form[element.name]
+
+
+                    formElement.disabled = element.disabled
+                    if (element.options) {
+                        formElement.selectedIndex = element.selectedIndex
+                        for (let oopi = 0; oopi < element.options.length; oopi++) {
+                            const option = element.options[oopi];
+                            elementOption = formElement.options[option.index]
+                            elementOption.hidden = option.hidden
+                            elementOption.text = option.text
+                            
+                            
+                        }
+                    }else{
+                        formElement.value = element.value
+                    }
+
+                    
+
+                    
+                    
+                }
+                    
+                   
+            })
+                    
+            
+    };
+    
+    
+    form.addEventListener("change",change_form);
+    form.addEventListener("load",change_form());
+
+
+</script>
+
+{% endblock %}
+
+

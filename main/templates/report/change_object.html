@@ -1,0 +1,204 @@
+<html>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <head>
+    
+    <title>{{title}}</title>
+    <style type="text/css">
+        @page {
+            
+            margin: 0mm 0mm 0mm 0mm;
+            width: {{size.width}};
+            height: {{size.height}};
+            
+            margin-top: {{margin.top}};
+            margin-bottom: {{margin.bottom}};
+            margin-left: {{margin.left}};
+            margin-right: {{margin.right}};
+            
+        }
+        td {
+            border: 1px solid black;
+            font-size: 14px;
+        
+        }
+        table,th {
+            border:2px solid black;
+        }
+        th {
+            font-size: 14px;
+        }
+    </style>
+
+    {% block style %}{% endblock %}
+    
+
+</head>
+
+<body>
+    
+<div class="col-12 p-4" dir="rtl" style="width: {{size.width}};" class="text-sm">
+    
+    {% block header_page %}
+    <div class="row" style="border: 2px solid black ;border-radius: 15px" >
+        <div class="col-4 text-sm" >
+          <address>
+            <center>
+                {% for address in address_list %}
+                    {{address}}<br>
+                {% endfor %}
+            </center>
+        </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+            <center>
+                        بسم الله الرحمن الرحيم
+                    <address>
+                      
+                        <img src="{{logo}}" class="" style="width: 150px; hight: 150px;" alt="">
+                        
+                      </address>
+                      
+
+                     
+                      
+                      
+                      
+            </center>
+        </div>
+        <!-- /.col -->
+        <div class="col-4" style="text-align: center;">
+            
+                <br>
+                <b>التاريخ: </b><span dir="ltr">{{date_report}}</span>
+            <br>
+                    
+        </div>
+        <!-- /.col -->
+        
+        
+        
+    
+    
+    </div>
+    <div class="row"><div class="col-12 text-center"><span style="padding: 0;"> {{title_report}}</span></div></div>
+   
+    
+    {% endblock %}
+    
+
+<div class="col-12">
+    {% block header_report %}
+        
+    
+    <div class="row p-0" style="border: 2px solid black;margin-top: 5px;border-bottom: 0;border-radius: 10px 10px 0 0;" >
+        
+        {% for fieldset in result_fieldsets_list %}
+        <div class="col">
+            {% if fieldset.name %}
+            <div class="col-12" style="text-align: center;">
+                {{fieldset.name}}
+            </div>
+            {% endif %}
+            <div class="row">
+                {% for field in fieldset.fields %}
+                    <div class="col-12" >
+                        <b>
+                            {{field.name}}: 
+                        </b>
+                        {{field.value}}
+                                
+                    </div> 
+
+                {% endfor %}
+            </div>
+        </div> 
+            
+        {% endfor %}
+            
+        
+        
+        
+
+    </div>
+   
+
+    {% endblock %}
+        
+
+    <div class="">
+        <div class="">
+            {% block content %}
+                {% if inline_result_list.results %}
+                    {% block result_list %}
+                        <div class="">
+                            <div class="">
+                                <table style="width: 100%;" >
+                                    <thead>
+                                        <tr>
+                                        
+                                            
+                                            {% for header in inline_result_list.result_headers %}
+                                            <th style="background-color: aqua;">
+                                                
+                                                    {{header.text}}
+                                            
+                                            </th>
+                                            {% endfor %}
+                                        
+                                        
+                                        </tr>
+                                    </thead>  
+                                        
+                                    <tbody>
+                                        {% for result in inline_result_list.results %}
+                                            
+                                            <tr>
+                                                {% for item in result %}
+                                                    {{ item }}
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endblock %}
+                    <br><br>
+                    <div class="row">
+                        {% block report_footer %}
+                                {% for footer in footer_list %}
+                                <div class="col">
+                                    {{footer}}
+                                </div>
+                                {% endfor %}          
+                        {% endblock %}
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <br><br><br><br><br><br>
+                        <center>
+                            <h3>لا يوجد بيانات ...</h3>
+                        </center>
+                        
+                    </div>
+                {% endif %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+    
+
+
+
+
+
+</div>
+
+</body>
+
+</html>

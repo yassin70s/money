@@ -1,0 +1,196 @@
+{% load static main %}
+<html>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <head>
+    
+    <title>{{title}}</title>
+    <style type="text/css">
+        @page {
+            
+            margin: 0mm 0mm 0mm 0mm;
+            width: {{size.width}};
+            height: {{size.height}};
+            
+            margin-top: {{margin.top}};
+            margin-bottom: {{margin.bottom}};
+            
+        }
+    </style>
+
+</head>
+
+<body>
+<div dir="rtl" style="width: {{size.width}};padding: 4mm;" class="text-sm">
+    
+    {% block header_page %}
+    <div class="row">
+        <div class="col-4">
+          <address>
+            <center>
+                {% for address in address_list %}
+                    {{address}}<br>
+                {% endfor %}
+            </center>
+        </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-4">
+            <center>
+                        بسم الله الرحمن الرحيم
+                    <address>
+                      
+                        <img src="{{logo}}" class="" style="width: 150px; hight: 150px;" alt="">
+                      </address>
+                      
+                      
+            </center>
+        </div>
+        <!-- /.col -->
+        <div class="col-4" style="text-align: center;">
+            
+                <b dir="ltr">الرقم: </b>##<br>
+                <b>التاريخ: </b><span dir="ltr">{{date_report}}</span>
+            <br>
+                    
+        </div>
+        <!-- /.col -->
+     
+    </div>
+    <!-- /.row --> 
+    
+    {% endblock %}
+    {% block title_report %}
+    <div class="row" style="height: 30px;background-color:rgba(48, 211, 233, 0.966);">
+        <div class="col-2">
+
+        </div>
+        <div class="col-8">
+            <center>
+                {{title_report}}
+            </center>
+
+        </div>
+        <div class="col-2">
+
+        </div>
+     
+    </div>
+    <!-- /.row --> 
+    <br>
+    {% endblock %}
+
+    
+    {% block header_report %}
+        
+    
+    <div class="row">
+        
+        {% for fieldset in admin_form %}
+        <fieldset class="module aligned {{ fieldset.classes }}">
+            {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+            {% if fieldset.description %}
+                <div class="description">{{ fieldset.description|safe }}</div>
+            {% endif %}
+        
+            {% for line in fieldset %}
+                <div class="form-row{% if line.fields|length == 1 and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+                    {% if line.fields|length == 1 %}{{ line.errors }}{% else %}<div class="flex-container form-multiline">{% endif %}
+                    {% for field in line %}
+                        <div>
+                            {% if not line.fields|length == 1 and not field.is_readonly %}{{ field.errors }}{% endif %}
+                                <div class="flex-container{% if not line.fields|length == 1 %} fieldBox{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}{% elif field.is_checkbox %} checkbox-row{% endif %}">
+                                    {% if field.is_checkbox %}
+                                        {{ field.field }}{{ field.label_tag }}
+                                    {% else %}
+                                        {{ field.label_tag }}
+                                        {% if field.is_readonly %}
+                                            <div class="readonly">{{ field.contents }}</div>
+                                        {% else %}
+                                            {{ field|get_field_value }}
+                                            
+                                            
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% if field.field.help_text %}
+                                <div class="help"{% if field.field.id_for_label %} id="{{ field.field.id_for_label }}_helptext"{% endif %}>
+                                    <div>{{ field.field.help_text|safe }}</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if not line.fields|length == 1 %}</div>{% endif %}
+                </div>
+            {% endfor %}
+        </fieldset>
+        {% endfor %}
+        
+        
+
+    </div>
+    <br>
+
+    {% endblock %}
+        
+
+
+    {% block content %}
+     
+
+    
+    {% if rows %}
+    <table class="table table-sm table-bordered" style="border: 1px outset black;">
+        <thead>
+            <tr>
+            
+                
+                {% for column in columns %}
+                <th >
+                    <div style="text-align: center; text-orientation: upright;writing-mode: vertical-rl;">
+                        {{column.headerName}}
+                    </div>
+                </th>
+                {% endfor %}
+               
+            
+            </tr>
+        </thead>  
+              
+        <tbody>
+            
+               
+                {% for row in rows %}
+                <tr>
+                    
+                    
+                        {% for key,value in row.cells|items %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    
+               
+                </tr>
+                {% endfor %}
+            
+            
+        </tbody>
+    </table>
+    {% else %}
+    <div class="col-12">
+        <br><br><br><br><br><br>
+        <center>
+            <h3>لايوجد بيانات</h3>
+        </center>
+        
+    </div>
+    {% endif %}
+    {% endblock %}
+</div>
+
+
+
+
+
+</body>
+
+</html>
